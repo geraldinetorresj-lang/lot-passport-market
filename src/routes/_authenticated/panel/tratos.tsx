@@ -8,7 +8,7 @@ import { AccionesTrato } from "@/components/tratos/AccionesTrato";
 import { fechaLima } from "@/lib/lotes";
 import { nombreCategoria } from "@/lib/materiales";
 import { misTratosQuery, type Trato } from "@/lib/tratos";
-import { ESTADO_TRATO_LABEL, esperaMiAccion } from "@/lib/tratos-reglas";
+import { contarPendientes, ESTADO_TRATO_LABEL } from "@/lib/tratos-reglas";
 
 export const Route = createFileRoute("/_authenticated/panel/tratos")({
   head: () => ({ meta: [{ title: "Mis tratos · Panel · Remanente" }] }),
@@ -20,7 +20,7 @@ function TratosPage() {
   const { data = [], isLoading, error } = useQuery(misTratosQuery(user.id));
   const compras = data.filter((t) => t.rol === "compradora");
   const ventas = data.filter((t) => t.rol === "vendedora");
-  const pend = (l: Trato[]) => l.filter((t) => esperaMiAccion(t.estado, t.rol)).length;
+  const pend = (l: Trato[]) => contarPendientes(l);
 
   return (
     <div>

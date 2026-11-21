@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Lock } from "lucide-react";
 
 import { ColaRevision } from "@/components/lotes/ColaRevision";
+import { ProblemasEntrega } from "@/components/tratos/ProblemasEntrega";
 import { esAdminQuery } from "@/lib/empresa";
 
 export const Route = createFileRoute("/_authenticated/panel/admin")({
@@ -44,6 +45,11 @@ function AdminPage() {
         la empresa ve el motivo.
       </p>
       <ColaRevision />
+      <section className="mt-14" aria-labelledby="problemas-entrega">
+        <h2 id="problemas-entrega" className="font-display text-2xl text-primary-deep">Entregas con problema</h2>
+        <p className="measure mt-2 text-muted-foreground">Tratos que la empresa compradora no confirmó porque algo no salió bien. No se emite constancia hasta resolverlos.</p>
+        <ProblemasEntrega />
+      </section>
     </div>
   );
 }

@@ -35,6 +35,21 @@ const TRANSICIONES: Record<AccionTrato, { desde: EstadoTrato[]; rol: RolTrato[] 
   problema: { desde: ["entregada"], rol: ["compradora"] },
 };
 
+/** Estado al que pasa el trato después de cada acción. Debe coincidir con `transicion_trato`. */
+export const ESTADO_DESTINO: Record<AccionTrato, EstadoTrato> = {
+  aceptar: "aceptada",
+  rechazar: "rechazada",
+  cancelar: "cancelada",
+  entregar: "entregada",
+  confirmar: "completada",
+  problema: "con_problema",
+};
+
+/** Estado resultante, o null si la acción no está permitida para ese rol en ese estado. */
+export function siguienteEstado(estado: EstadoTrato, accion: AccionTrato, rol: RolTrato): EstadoTrato | null {
+  return puedeAccion(estado, accion, rol) ? ESTADO_DESTINO[accion] : null;
+}
+
 export function puedeAccion(estado: EstadoTrato, accion: AccionTrato, rol: RolTrato) {
   const t = TRANSICIONES[accion];
   return t.desde.includes(estado) && t.rol.includes(rol);
@@ -65,6 +80,11 @@ export function puedeSolicitarLote({ tieneSesion, esDueno, estado }: { tieneSesi
 /** Tratos que esperan una acción tuya (para el indicador de pendientes). */
 export function esperaMiAccion(estado: EstadoTrato, rol: RolTrato) {
   return accionesDisponibles(estado, rol).some((a) => a !== "cancelar");
+}
+
+/** Cuántos tratos esperan una acción de tu empresa (indicador del menú y de las pestañas). */
+export function contarPendientes(tratos: { estado: EstadoTrato; rol: RolTrato }[]) {
+  return tratos.filter((t) => esperaMiAccion(t.estado, t.rol)).length;
 }
 
 export function enlaceWhatsApp(telefono: string | null | undefined) {

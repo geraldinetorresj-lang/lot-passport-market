@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { PageShell } from "@/components/site/PageShell";
 import { ReportarLote } from "@/components/lotes/ReportarLote";
 import { SolicitarLote } from "@/components/tratos/SolicitarLote";
+import { TratoEnLote } from "@/components/tratos/TratoEnLote";
 import { useAuth } from "@/lib/auth";
 import { ESTADO_LABEL, fechaLima, pasaporteQuery } from "@/lib/lotes";
 import { nombreCategoria } from "@/lib/materiales";
@@ -118,6 +119,8 @@ function PasaportePage() {
             <p className="mt-6 text-sm text-muted-foreground">
               Registro de Remanente. No es una certificación ambiental oficial.
             </p>
+
+            {ready && session && <TratoEnLote codigo={lote.codigo} userId={session.user.id} />}
 
             {puedeSolicitarLote({
               tieneSesion: !!session,

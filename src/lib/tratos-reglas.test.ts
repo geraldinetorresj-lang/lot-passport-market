@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { accionesDisponibles, contactoVisible, datosOtraEmpresa, enlaceWhatsApp, MAX_SOLICITUDES_PENDIENTES, puedeAccion, puedeSolicitar, puedeSolicitarLote, solicitarSchema } from "./tratos-reglas";
+import { accionesDisponibles, contactoVisible, contarPendientes, siguienteEstado, datosOtraEmpresa, enlaceWhatsApp, MAX_SOLICITUDES_PENDIENTES, puedeAccion, puedeSolicitar, puedeSolicitarLote, solicitarSchema } from "./tratos-reglas";
 
 const empresa = { nombre_empresa: "Textiles SAC", representante: "Ana", telefono: "987654321", correo: "a@t.pe" };
 
@@ -26,6 +26,49 @@ describe("transiciones de trato", () => {
     expect(accionesDisponibles("completada", "vendedora")).toEqual([]);
     expect(accionesDisponibles("rechazada", "compradora")).toEqual([]);
     expect(accionesDisponibles("con_problema", "compradora")).toEqual([]);
+  });
+});
+
+describe("entrega y recepción", () => {
+  it("al marcar la entrega, un trato aceptado pasa a entregada", () => {
+    expect(siguienteEstado("aceptada", "entregar", "vendedora")).toBe("entregada");
+  });
+  it("al confirmar, un trato entregado pasa a completada", () => {
+    expect(siguienteEstado("entregada", "confirmar", "compradora")).toBe("completada");
+  });
+  it("al avisar un problema, un trato entregado pasa a con_problema y no se completa", () => {
+    expect(siguienteEstado("entregada", "problema", "compradora")).toBe("con_problema");
+  });
+  it("solo la compradora puede confirmar o avisar un problema", () => {
+    expect(siguienteEstado("entregada", "confirmar", "vendedora")).toBeNull();
+    expect(siguienteEstado("entregada", "problema", "vendedora")).toBeNull();
+  });
+  it("no se confirma un trato que aún no se entregó", () => {
+    expect(siguienteEstado("solicitada", "confirmar", "compradora")).toBeNull();
+    expect(siguienteEstado("aceptada", "problema", "compradora")).toBeNull();
+  });
+  it("la constancia se emite una sola vez: un trato completado ya no se puede confirmar", () => {
+    expect(siguienteEstado("completada", "confirmar", "compradora")).toBeNull();
+    expect(accionesDisponibles("completada", "compradora")).toEqual([]);
+  });
+  it("un trato con problema no se puede confirmar después", () => {
+    expect(siguienteEstado("con_problema", "confirmar", "compradora")).toBeNull();
+  });
+});
+
+describe("indicador de pendientes", () => {
+  it("cuenta solo los tratos que esperan una acción tuya", () => {
+    expect(contarPendientes([
+      { estado: "solicitada", rol: "vendedora" }, // aceptar o rechazar
+      { estado: "aceptada", rol: "vendedora" }, // marcar entregado
+      { estado: "entregada", rol: "compradora" }, // confirmar recepción
+      { estado: "solicitada", rol: "compradora" }, // espera a la vendedora
+      { estado: "entregada", rol: "vendedora" }, // espera a la compradora
+      { estado: "completada", rol: "compradora" },
+    ])).toBe(3);
+  });
+  it("sin tratos no hay pendientes", () => {
+    expect(contarPendientes([])).toBe(0);
   });
 });
 

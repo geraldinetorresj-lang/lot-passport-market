@@ -6,7 +6,6 @@
 - [x] Área privada con panel, perfil editable y secciones "Próximamente"
 
 ## En curso
-- [ ] Bloque 2 — solicitado; esperando instrucciones de la usuaria sobre contacto, tratos y constancia de entrega antes de definir el flujo.
 - [ ] Corregir el ícono del logo y aplicar la nueva dirección visual con Fraunces y Manrope
 - [ ] Crear el flujo animado y la rosa interactiva de la portada
 - [ ] Revisar responsive, movimiento reducido, tests y compilación
@@ -27,11 +26,18 @@
 - [x] El dueño de un lote no ve el botón sobre su propio lote (mercado y pasaporte)
 - [x] Solicitud → aceptación → datos de contacto y WhatsApp probados de punta a punta con dos empresas de prueba (los datos se borraron después)
 
+## Hecho (iteración 5 — Bloque 2A, parte final)
+- [x] "Confirmar recepción" en la página del lote (la que abre el QR) para la empresa compradora, además de en "Mis tratos"
+- [x] "Hay un problema con la entrega": aviso visible para ambas empresas y lista "Entregas con problema" para el equipo admin
+- [x] Indicador de tratos pendientes en el menú del panel (escritorio y móvil)
+- [x] La compradora ahora ve los datos del lote en sus tratos
+- [x] Pruebas: entrega → completada / con problema, solo la compradora confirma, una constancia por trato, huella y verificación pública sin datos privados
+- [x] Flujo completo probado con dos empresas de prueba (solicitar → aceptar → entregar → confirmar → constancia → PDF → verificación); datos borrados
+
 ## Próximo
 - [ ] Analizar merma con IA (foto → ficha sugerida)
 - [ ] Verificación de empresas con SUNAT
 - [ ] Contrato en PDF
-- [ ] Certificados PDF verificables
 - [ ] Panel de impacto por empresa
 - [ ] Mapa de simbiosis
 - [ ] Admin (asignar rol admin y herramientas)
