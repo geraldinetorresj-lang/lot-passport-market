@@ -53,6 +53,15 @@ export function puedeSolicitar({ tieneCompletado, pendientes }: { tieneCompletad
   return tieneCompletado || pendientes < MAX_SOLICITUDES_PENDIENTES;
 }
 
+/**
+ * Regla de visibilidad del botón "Solicitar este lote": solo una empresa con sesión
+ * puede pedir un lote publicado que no sea suyo. La base de datos vuelve a
+ * comprobarlo al crear la solicitud.
+ */
+export function puedeSolicitarLote({ tieneSesion, esDueno, estado }: { tieneSesion: boolean; esDueno: boolean; estado: string }) {
+  return tieneSesion && !esDueno && estado === "publicado";
+}
+
 /** Tratos que esperan una acción tuya (para el indicador de pendientes). */
 export function esperaMiAccion(estado: EstadoTrato, rol: RolTrato) {
   return accionesDisponibles(estado, rol).some((a) => a !== "cancelar");

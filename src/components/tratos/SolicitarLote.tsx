@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { HandHeart } from "lucide-react";
@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { solicitarLote } from "@/lib/tratos.functions";
 import { MAX_MENSAJE_SOLICITUD, OPCIONES_RECOGIDA } from "@/lib/tratos-reglas";
 
-export function SolicitarLote({ loteId, codigo }: { loteId: string; codigo: string }) {
+export function SolicitarLote({ loteId, codigo, autoAbrir = false }: { loteId: string; codigo: string; autoAbrir?: boolean }) {
   const solicitar = useServerFn(solicitarLote);
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -18,6 +18,11 @@ export function SolicitarLote({ loteId, codigo }: { loteId: string; codigo: stri
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [enviado, setEnviado] = useState(false);
+
+  // Llega desde el mercado con ?solicitar=1: abrir el diálogo directamente.
+  useEffect(() => {
+    if (autoAbrir) setOpen(true);
+  }, [autoAbrir]);
 
   async function enviar() {
     if (!recogida) return setError("Cuéntanos cómo recogerán el lote.");

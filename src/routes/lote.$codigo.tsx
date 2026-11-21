@@ -7,11 +7,15 @@ import { QRCodeCanvas } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { PageShell } from "@/components/site/PageShell";
 import { ReportarLote } from "@/components/lotes/ReportarLote";
+import { SolicitarLote } from "@/components/tratos/SolicitarLote";
 import { useAuth } from "@/lib/auth";
 import { ESTADO_LABEL, fechaLima, pasaporteQuery } from "@/lib/lotes";
 import { nombreCategoria } from "@/lib/materiales";
+import { puedeSolicitarLote } from "@/lib/tratos-reglas";
 
 export const Route = createFileRoute("/lote/$codigo")({
+  validateSearch: (search: Record<string, unknown>): { solicitar?: 1 } =>
+    search["solicitar"] === "1" ? { solicitar: 1 } : {},
   loader: ({ params, context }) => context.queryClient.ensureQueryData(pasaporteQuery(params.codigo)),
   head: ({ loaderData }) => {
     const title = loaderData
@@ -36,6 +40,7 @@ export const Route = createFileRoute("/lote/$codigo")({
 
 function PasaportePage() {
   const { codigo } = Route.useParams();
+  const { solicitar } = Route.useSearch();
   const { data: lote } = useSuspenseQuery(pasaporteQuery(codigo));
   const { session, ready } = useAuth();
   const [url, setUrl] = useState("");
@@ -113,6 +118,16 @@ function PasaportePage() {
             <p className="mt-6 text-sm text-muted-foreground">
               Registro de Remanente. No es una certificación ambiental oficial.
             </p>
+
+            {puedeSolicitarLote({
+              tieneSesion: !!session,
+              esDueno: !!session && lote.empresa_id === session.user.id,
+              estado: lote.estado,
+            }) && (
+              <div className="mt-8">
+                <SolicitarLote loteId={lote.id} codigo={lote.codigo} autoAbrir={solicitar === 1} />
+              </div>
+            )}
 
             {!session && ready && (
               <div className="surface-card mt-8 p-6">

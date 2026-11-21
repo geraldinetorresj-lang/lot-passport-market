@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { accionesDisponibles, contactoVisible, datosOtraEmpresa, enlaceWhatsApp, MAX_SOLICITUDES_PENDIENTES, puedeAccion, puedeSolicitar, solicitarSchema } from "./tratos-reglas";
+import { accionesDisponibles, contactoVisible, datosOtraEmpresa, enlaceWhatsApp, MAX_SOLICITUDES_PENDIENTES, puedeAccion, puedeSolicitar, puedeSolicitarLote, solicitarSchema } from "./tratos-reglas";
 
 const empresa = { nombre_empresa: "Textiles SAC", representante: "Ana", telefono: "987654321", correo: "a@t.pe" };
 
@@ -42,6 +42,22 @@ describe("límite de solicitudes", () => {
     const base = { loteId: "00000000-0000-4000-8000-000000000000", recogida: "Recogemos con nuestra movilidad" };
     expect(solicitarSchema.safeParse({ ...base, mensaje: "a".repeat(300) }).success).toBe(true);
     expect(solicitarSchema.safeParse({ ...base, mensaje: "a".repeat(301) }).success).toBe(false);
+  });
+});
+
+describe("botón solicitar lote", () => {
+  it("una empresa con sesión puede solicitar un lote publicado de otra", () => {
+    expect(puedeSolicitarLote({ tieneSesion: true, esDueno: false, estado: "publicado" })).toBe(true);
+  });
+  it("nadie solicita su propio lote", () => {
+    expect(puedeSolicitarLote({ tieneSesion: true, esDueno: true, estado: "publicado" })).toBe(false);
+  });
+  it("sin sesión no se solicita", () => {
+    expect(puedeSolicitarLote({ tieneSesion: false, esDueno: false, estado: "publicado" })).toBe(false);
+  });
+  it("un lote que no está publicado no se puede solicitar", () => {
+    expect(puedeSolicitarLote({ tieneSesion: true, esDueno: false, estado: "reservado" })).toBe(false);
+    expect(puedeSolicitarLote({ tieneSesion: true, esDueno: false, estado: "en_revision" })).toBe(false);
   });
 });
 

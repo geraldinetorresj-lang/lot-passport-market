@@ -1,21 +1,32 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { Package, Store } from "lucide-react";
+import { HandHeart, Package, Store } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth";
 import { mercadoQuery, fechaLima } from "@/lib/lotes";
 import { nombreCategoria } from "@/lib/materiales";
+import { puedeSolicitarLote } from "@/lib/tratos-reglas";
 import { filtrarLotes, hayFiltroActivo, opcionesFiltro, SIN_FILTRO, type FiltroLotes } from "@/lib/lotes-filtro";
 
 const selectClass = "h-11 w-full rounded-md border border-input bg-surface px-3 text-sm sm:w-64";
 
 export function MercadoGrid() {
   const { data: lotes = [], isLoading, error } = useQuery(mercadoQuery);
+  const { session } = useAuth();
   const [filtro, setFiltro] = useState<FiltroLotes>({ categoria: SIN_FILTRO, distrito: SIN_FILTRO });
 
   const visibles = filtrarLotes(lotes, filtro);
   const { categorias, distritos } = opcionesFiltro(lotes);
+
+  // El mercado solo lista lotes publicados; falta saber si el lote es de la empresa con sesión.
+  const puedePedir = (empresaId: string) =>
+    puedeSolicitarLote({
+      tieneSesion: !!session,
+      esDueno: !!session && empresaId === session.user.id,
+      estado: "publicado",
+    });
 
   if (isLoading) return <p className="mt-8 text-muted-foreground">Cargando lotes publicados…</p>;
   if (error) return <p role="alert" className="mt-8 text-destructive">No pudimos cargar el mercado. Inténtalo de nuevo.</p>;
@@ -97,11 +108,11 @@ export function MercadoGrid() {
       ) : (
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {visibles.map((lote) => (
-            <li key={lote.codigo}>
+            <li key={lote.codigo} className="surface-card flex h-full flex-col overflow-hidden">
               <Link
                 to="/lote/$codigo"
                 params={{ codigo: lote.codigo }}
-                className="surface-card group block h-full overflow-hidden transition-shadow hover:shadow-paper"
+                className="group block flex-1 transition-shadow hover:shadow-paper"
               >
                 <div className="aspect-[4/3] w-full overflow-hidden bg-mint">
                   {lote.foto ? (
@@ -127,6 +138,15 @@ export function MercadoGrid() {
                   </p>
                 </div>
               </Link>
+              {puedePedir(lote.empresa_id) && (
+                <div className="border-t border-border p-5 pt-4">
+                  <Button size="sm" className="w-full" asChild>
+                    <Link to="/lote/$codigo" params={{ codigo: lote.codigo }} search={{ solicitar: 1 }}>
+                      <HandHeart strokeWidth={1.5} /> Solicitar este lote
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </li>
           ))}
         </ul>

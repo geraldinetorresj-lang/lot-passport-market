@@ -540,6 +540,7 @@ export type Database = {
           categoria: string
           codigo: string
           distrito: string
+          empresa_id: string
           foto_principal: string
           nombre_empresa: string
           peso_kg: number

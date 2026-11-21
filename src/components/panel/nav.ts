@@ -1,6 +1,7 @@
 import {
   Camera,
   Flower2,
+  Handshake,
   Home,
   Map,
   PackagePlus,
@@ -17,6 +18,7 @@ export type PanelPath =
   | "/panel/analizar"
   | "/panel/publicar"
   | "/panel/mercado"
+  | "/panel/tratos"
   | "/panel/impacto"
   | "/panel/mapa"
   | "/panel/perfil"
@@ -59,6 +61,13 @@ export const PANEL_ITEMS: PanelItem[] = [
     label: "Mercado",
     descripcion: "Explora lotes y contacta por WhatsApp.",
     icon: Store,
+    disponible: true,
+  },
+  {
+    to: "/panel/tratos",
+    label: "Mis tratos",
+    descripcion: "Sigue tus solicitudes, entregas y constancias.",
+    icon: Handshake,
     disponible: true,
   },
   {

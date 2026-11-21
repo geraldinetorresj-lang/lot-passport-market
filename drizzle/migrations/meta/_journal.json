@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1795300165807,
+      "tag": "0000_mercado_lotes_devuelve_empresa_id",
+      "breakpoints": true
+    }
+  ]
 }
