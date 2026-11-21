@@ -21,10 +21,14 @@
 - [x] Pasaporte público del lote con QR, fotos y botón de reporte
 - [x] Mercado público con filtros por categoría y distrito
 
+## Hecho (iteración 4)
+- [x] "Mis tratos" aparece en la barra lateral del panel (antes la página existía pero no tenía entrada)
+- [x] "Solicitar este lote" en las fichas del mercado y en el pasaporte del lote; el diálogo se abre solo al llegar desde el mercado
+- [x] El dueño de un lote no ve el botón sobre su propio lote (mercado y pasaporte)
+- [x] Solicitud → aceptación → datos de contacto y WhatsApp probados de punta a punta con dos empresas de prueba (los datos se borraron después)
+
 ## Próximo
 - [ ] Analizar merma con IA (foto → ficha sugerida)
-- [ ] Contacto y tratos entre empresas (WhatsApp)
-- [ ] Constancia de entrega
 - [ ] Verificación de empresas con SUNAT
 - [ ] Contrato en PDF
 - [ ] Certificados PDF verificables
