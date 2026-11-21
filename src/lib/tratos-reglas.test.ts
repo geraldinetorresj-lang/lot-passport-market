@@ -1,0 +1,62 @@
+import { describe, expect, it } from "vitest";
+import { accionesDisponibles, contactoVisible, datosOtraEmpresa, enlaceWhatsApp, MAX_SOLICITUDES_PENDIENTES, puedeAccion, puedeSolicitar, solicitarSchema } from "./tratos-reglas";
+
+const empresa = { nombre_empresa: "Textiles SAC", representante: "Ana", telefono: "987654321", correo: "a@t.pe" };
+
+describe("transiciones de trato", () => {
+  it("la vendedora acepta o rechaza una solicitud", () => {
+    expect(puedeAccion("solicitada", "aceptar", "vendedora")).toBe(true);
+    expect(puedeAccion("solicitada", "rechazar", "vendedora")).toBe(true);
+  });
+  it("la compradora no puede aceptar su propia solicitud", () => {
+    expect(puedeAccion("solicitada", "aceptar", "compradora")).toBe(false);
+  });
+  it("solo la vendedora marca entregado y solo si está aceptada", () => {
+    expect(puedeAccion("aceptada", "entregar", "vendedora")).toBe(true);
+    expect(puedeAccion("aceptada", "entregar", "compradora")).toBe(false);
+    expect(puedeAccion("solicitada", "entregar", "vendedora")).toBe(false);
+  });
+  it("solo la compradora confirma recepción tras la entrega", () => {
+    expect(puedeAccion("entregada", "confirmar", "compradora")).toBe(true);
+    expect(puedeAccion("entregada", "confirmar", "vendedora")).toBe(false);
+    expect(puedeAccion("aceptada", "confirmar", "compradora")).toBe(false);
+  });
+  it("no se puede cancelar después de entregar ni tocar tratos cerrados", () => {
+    expect(puedeAccion("entregada", "cancelar", "compradora")).toBe(false);
+    expect(accionesDisponibles("completada", "vendedora")).toEqual([]);
+    expect(accionesDisponibles("rechazada", "compradora")).toEqual([]);
+    expect(accionesDisponibles("con_problema", "compradora")).toEqual([]);
+  });
+});
+
+describe("límite de solicitudes", () => {
+  it("una empresa nueva puede tener hasta 3 pendientes", () => {
+    expect(MAX_SOLICITUDES_PENDIENTES).toBe(3);
+    expect(puedeSolicitar({ tieneCompletado: false, pendientes: 2 })).toBe(true);
+    expect(puedeSolicitar({ tieneCompletado: false, pendientes: 3 })).toBe(false);
+  });
+  it("con un trato completado ya no hay límite", () => {
+    expect(puedeSolicitar({ tieneCompletado: true, pendientes: 10 })).toBe(true);
+  });
+  it("el mensaje admite máximo 300 caracteres", () => {
+    const base = { loteId: "00000000-0000-4000-8000-000000000000", recogida: "Recogemos con nuestra movilidad" };
+    expect(solicitarSchema.safeParse({ ...base, mensaje: "a".repeat(300) }).success).toBe(true);
+    expect(solicitarSchema.safeParse({ ...base, mensaje: "a".repeat(301) }).success).toBe(false);
+  });
+});
+
+describe("datos de contacto", () => {
+  it("no se exponen antes de aceptar", () => {
+    for (const estado of ["solicitada", "rechazada", "cancelada"] as const) {
+      expect(contactoVisible(estado)).toBe(false);
+      const d = datosOtraEmpresa(estado, empresa);
+      expect(d.telefono).toBeNull();
+      expect(d.correo).toBeNull();
+      expect(d.representante).toBeNull();
+    }
+  });
+  it("se muestran a ambas partes después de aceptar", () => {
+    expect(datosOtraEmpresa("aceptada", empresa).telefono).toBe("987654321");
+    expect(enlaceWhatsApp("987 654 321")).toBe("https://wa.me/51987654321");
+  });
+});
