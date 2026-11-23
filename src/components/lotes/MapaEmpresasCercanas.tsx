@@ -66,7 +66,7 @@ export function MapaEmpresasCercanas({ lotes }: { lotes: readonly LoteUbicable[]
             {empresas.length} {empresas.length === 1 ? "empresa cercana" : "empresas cercanas"}
           </p>
           {empresas.length ? (
-            <ul className="max-h-[560px] space-y-3 overflow-y-auto p-1">
+            <ul className="max-h-72 space-y-3 overflow-y-auto p-1 md:max-h-[560px]">
               {empresas.map((empresa) => (
                 <li key={empresa.id}>
                   <Button variant="outline" aria-pressed={seleccion?.id === empresa.id}
@@ -106,7 +106,7 @@ export function MapaEmpresasCercanas({ lotes }: { lotes: readonly LoteUbicable[]
             </Button>
           </div>
           <iframe key={enlaces.mapa} src={enlaces.mapa} title={seleccion ? `Google Maps · referencia de ${seleccion.nombre} en ${seleccion.distrito}` : "Google Maps · ubicación activa"}
-            className="h-[420px] w-full rounded-lg border border-border bg-muted md:h-[460px]" loading="lazy" allowFullScreen referrerPolicy="no-referrer" />
+            className="h-72 w-full rounded-lg border border-border bg-muted md:h-[460px]" loading="lazy" allowFullScreen referrerPolicy="no-referrer" />
         </div>
       </div>
     </section>
