@@ -6,6 +6,7 @@
 - [x] Área privada con panel, perfil editable y secciones "Próximamente"
 
 ## En curso
+- [x] Mapa de empresas cercanas en ambos catálogos: referencia distrital, filtros de distancia, selección y geolocalización con respaldo a Lima; 24 pruebas y revisión móvil/escritorio. Visualización de Google pendiente de comprobar al publicar; sedes exactas y RUC verificado requieren datos reales.
 - [ ] Corregir el ícono del logo y aplicar la nueva dirección visual con Fraunces y Manrope
 - [ ] Crear el flujo animado y la rosa interactiva de la portada
 - [ ] Revisar responsive, movimiento reducido, tests y compilación
