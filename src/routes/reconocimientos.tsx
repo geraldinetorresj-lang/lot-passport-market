@@ -4,7 +4,7 @@ import type { ComponentType } from "react";
 
 import { SimplePage } from "@/components/site/SimplePage";
 
-const RECONOCIMIENTOS: { titulo: string; criterio: string; Icono: ComponentType<{ className?: string; "aria-hidden"?: boolean | "true" }> }[] = [
+const RECONOCIMIENTOS: { titulo: string; criterio: string; Icono: ComponentType<{ className?: string; strokeWidth?: number; "aria-hidden"?: boolean | "true" }> }[] = [
   { titulo: "Mayor desvío de residuos", criterio: "Más kilogramos entregados con constancia.", Icono: Recycle },
   { titulo: "Mejor reúso creativo", criterio: "El uso más original de un residuo como materia prima.", Icono: Sparkles },
   { titulo: "Liderazgo en economía circular", criterio: "Empresas que impulsan prácticas circulares en su cadena.", Icono: RefreshCw },
