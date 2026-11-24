@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as EquipoRouteImport } from './routes/equipo'
 import { Route as MercadoRouteImport } from './routes/mercado'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as RecuperarRouteImport } from './routes/recuperar'
@@ -53,6 +54,11 @@ const AuthRoute = AuthRouteImport.update({
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
   path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquipoRoute = EquipoRouteImport.update({
+  id: '/equipo',
+  path: '/equipo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MercadoRoute = MercadoRouteImport.update({
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contacto': typeof ContactoRoute
+  '/equipo': typeof EquipoRoute
   '/mercado': typeof MercadoRoute
   '/privacidad': typeof PrivacidadRoute
   '/recuperar': typeof RecuperarRoute
@@ -205,6 +212,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contacto': typeof ContactoRoute
+  '/equipo': typeof EquipoRoute
   '/mercado': typeof MercadoRoute
   '/privacidad': typeof PrivacidadRoute
   '/recuperar': typeof RecuperarRoute
@@ -233,6 +241,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/contacto': typeof ContactoRoute
+  '/equipo': typeof EquipoRoute
   '/mercado': typeof MercadoRoute
   '/privacidad': typeof PrivacidadRoute
   '/recuperar': typeof RecuperarRoute
@@ -262,6 +271,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/contacto'
+    | '/equipo'
     | '/mercado'
     | '/privacidad'
     | '/recuperar'
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/contacto'
+    | '/equipo'
     | '/mercado'
     | '/privacidad'
     | '/recuperar'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/contacto'
+    | '/equipo'
     | '/mercado'
     | '/privacidad'
     | '/recuperar'
@@ -345,6 +357,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContactoRoute: typeof ContactoRoute
+  EquipoRoute: typeof EquipoRoute
   MercadoRoute: typeof MercadoRoute
   PrivacidadRoute: typeof PrivacidadRoute
   RecuperarRoute: typeof RecuperarRoute
@@ -385,6 +398,13 @@ declare module '@tanstack/react-router' {
       path: '/contacto'
       fullPath: '/contacto'
       preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipo': {
+      id: '/equipo'
+      path: '/equipo'
+      fullPath: '/equipo'
+      preLoaderRoute: typeof EquipoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mercado': {
@@ -596,6 +616,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ContactoRoute: ContactoRoute,
+  EquipoRoute: EquipoRoute,
   MercadoRoute: MercadoRoute,
   PrivacidadRoute: PrivacidadRoute,
   RecuperarRoute: RecuperarRoute,
