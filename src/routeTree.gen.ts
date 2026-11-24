@@ -16,6 +16,7 @@ import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as EquipoRouteImport } from './routes/equipo'
 import { Route as MercadoRouteImport } from './routes/mercado'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
+import { Route as ReconocimientosRouteImport } from './routes/reconocimientos'
 import { Route as RecuperarRouteImport } from './routes/recuperar'
 import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -69,6 +70,11 @@ const MercadoRoute = MercadoRouteImport.update({
 const PrivacidadRoute = PrivacidadRouteImport.update({
   id: '/privacidad',
   path: '/privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReconocimientosRoute = ReconocimientosRouteImport.update({
+  id: '/reconocimientos',
+  path: '/reconocimientos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecuperarRoute = RecuperarRouteImport.update({
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/equipo': typeof EquipoRoute
   '/mercado': typeof MercadoRoute
   '/privacidad': typeof PrivacidadRoute
+  '/reconocimientos': typeof ReconocimientosRoute
   '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -215,6 +222,7 @@ export interface FileRoutesByTo {
   '/equipo': typeof EquipoRoute
   '/mercado': typeof MercadoRoute
   '/privacidad': typeof PrivacidadRoute
+  '/reconocimientos': typeof ReconocimientosRoute
   '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -244,6 +252,7 @@ export interface FileRoutesById {
   '/equipo': typeof EquipoRoute
   '/mercado': typeof MercadoRoute
   '/privacidad': typeof PrivacidadRoute
+  '/reconocimientos': typeof ReconocimientosRoute
   '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -274,6 +283,7 @@ export interface FileRouteTypes {
     | '/equipo'
     | '/mercado'
     | '/privacidad'
+    | '/reconocimientos'
     | '/recuperar'
     | '/registro'
     | '/reset-password'
@@ -302,6 +312,7 @@ export interface FileRouteTypes {
     | '/equipo'
     | '/mercado'
     | '/privacidad'
+    | '/reconocimientos'
     | '/recuperar'
     | '/registro'
     | '/reset-password'
@@ -330,6 +341,7 @@ export interface FileRouteTypes {
     | '/equipo'
     | '/mercado'
     | '/privacidad'
+    | '/reconocimientos'
     | '/recuperar'
     | '/registro'
     | '/reset-password'
@@ -360,6 +372,7 @@ export interface RootRouteChildren {
   EquipoRoute: typeof EquipoRoute
   MercadoRoute: typeof MercadoRoute
   PrivacidadRoute: typeof PrivacidadRoute
+  ReconocimientosRoute: typeof ReconocimientosRoute
   RecuperarRoute: typeof RecuperarRoute
   RegistroRoute: typeof RegistroRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -419,6 +432,13 @@ declare module '@tanstack/react-router' {
       path: '/privacidad'
       fullPath: '/privacidad'
       preLoaderRoute: typeof PrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reconocimientos': {
+      id: '/reconocimientos'
+      path: '/reconocimientos'
+      fullPath: '/reconocimientos'
+      preLoaderRoute: typeof ReconocimientosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recuperar': {
@@ -619,6 +639,7 @@ const rootRouteChildren: RootRouteChildren = {
   EquipoRoute: EquipoRoute,
   MercadoRoute: MercadoRoute,
   PrivacidadRoute: PrivacidadRoute,
+  ReconocimientosRoute: ReconocimientosRoute,
   RecuperarRoute: RecuperarRoute,
   RegistroRoute: RegistroRoute,
   ResetPasswordRoute: ResetPasswordRoute,
