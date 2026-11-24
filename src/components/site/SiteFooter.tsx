@@ -22,6 +22,9 @@ export function SiteFooter() {
           <Link to="/equipo" className="inline-flex min-h-11 items-center rounded-sm text-muted-foreground transition-colors hover:text-primary">
             Equipo
           </Link>
+          <Link to="/reconocimientos" className="inline-flex min-h-11 items-center rounded-sm text-muted-foreground transition-colors hover:text-primary">
+            Reconocimientos
+          </Link>
           <Link to="/contacto" className="inline-flex min-h-11 items-center rounded-sm text-muted-foreground transition-colors hover:text-primary">
             Contacto
           </Link>
